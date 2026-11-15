@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": "awesome-mpc",
+      "name": "awesome-mpc",
+      "kind": "curated_registry",
+      "trust": "secondary",
+      "url": "https://github.com/rdragos/awesome-mpc",
+      "contentUrl": "https://raw.githubusercontent.com/rdragos/awesome-mpc/main/readme.md",
+      "license": "CC0-style public-domain waiver",
+      "enabled": true
+    },
+    {
+      "id": "iacr-eprint",
+      "name": "IACR Cryptology ePrint Archive",
+      "kind": "paper_archive",
+      "trust": "primary_metadata",
+      "url": "https://eprint.iacr.org/",
+      "license": "metadata only; paper rights remain with authors",
+      "enabled": true
+    },
+    {
+      "id": "rfc-editor-crypto",
+      "name": "RFC Editor cryptography index",
+      "kind": "standards",
+      "trust": "primary_source",
+      "url": "https://www.rfc-editor.org/",
+      "contentUrl": "https://www.rfc-editor.org/rfc-index.xml",
+      "license": "IETF Trust Legal Provisions",
+      "enabled": true
+    },
+    {
+      "id": "docs-mp-spdz",
+      "name": "MP-SPDZ documentation",
+      "kind": "framework_documentation",
+      "trust": "primary_source",
+      "url": "https://mp-spdz.readthedocs.io/",
+      "contentUrl": "https://mp-spdz.readthedocs.io/en/latest/readme.html",
+      "description": "Official documentation for the MP-SPDZ multi-protocol MPC framework.",
+      "license": "GPL-3.0 project; documentation rights remain with authors",
+      "enabled": true
+    },
+    {
+      "id": "docs-mpyc",
+      "name": "MPyC documentation",
+      "kind": "framework_documentation",
+      "trust": "primary_source",
+      "url": "https://mpyc.readthedocs.io/",
+      "contentUrl": "https://mpyc.readthedocs.io/en/latest/",
+      "description": "Official documentation for the MPyC Python MPC framework.",
+      "license": "MIT project; documentation rights remain with authors",
+      "enabled": true
+    },
+    {
+      "id": "docs-secretflow-spu",
+      "name": "SecretFlow SPU documentation",
+      "kind": "framework_documentation",
+      "trust": "primary_source",
+      "url": "https://secret-flow.antgroup.com/docs/spu/en/",
+      "contentUrl": "https://secret-flow.antgroup.com/docs/spu/en/reference/runtime_config.html",
+      "description": "Official runtime and protocol configuration documentation for SecretFlow SPU.",
+      "license": "Apache-2.0 project; documentation rights remain with authors",
+      "enabled": true
+    }
+  ]
+}
