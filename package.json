@@ -9,6 +9,7 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/index.ts",
     "ingest": "tsx src/cli/ingest.ts",
+    "setup": "npm run build && npm run ingest && npm run check",
     "test": "node --import tsx --test \"src/**/*.test.ts\"",
     "check": "npm run build && npm test"
   },

@@ -12,9 +12,10 @@ interface SearchRow {
 export class CatalogStore {
   private readonly db: DatabaseSync;
 
-  constructor(path = ":memory:") {
+  constructor(path = ":memory:", options: { readOnly?: boolean } = {}) {
     if (path !== ":memory:") mkdirSync(dirname(path), { recursive: true });
-    this.db = new DatabaseSync(path);
+    this.db = new DatabaseSync(path, { readOnly: options.readOnly ?? false });
+    if (options.readOnly) return;
     this.db.exec(`
       PRAGMA journal_mode = WAL;
       PRAGMA synchronous = NORMAL;

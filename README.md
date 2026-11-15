@@ -18,8 +18,7 @@ Requires Node.js 20+.
 
 ```bash
 npm install
-npm run build
-npm run ingest
+npm run setup
 node dist/index.js
 ```
 
@@ -52,5 +51,7 @@ The repository ships reusable agent methodology separately from retrieval:
 These skills do not turn passing model tests into security proofs and do not treat secondary catalogs as evidence for cryptographic claims.
 
 The first catalog adapter ingests [awesome-mpc](https://github.com/rdragos/awesome-mpc) as a secondary discovery registry. Claims from curated lists are never promoted to primary-source evidence. Personal notes and private corpora are outside the public index; optional local overlays will remain separate.
+
+The repository includes a ready-to-query catalog snapshot at `data/catalog.db`. Runtime paths are resolved relative to the installed package, not the caller's current directory, and no catalog environment variable is required. `npm run ingest` refreshes the snapshot from the public source registry.
 
 The server does not claim semantic/full-PDF search yet. Current search is deterministic SQLite FTS5; primary-source resolution, terminology aliases, graph traversal, and hybrid retrieval are subsequent layers.

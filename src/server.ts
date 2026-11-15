@@ -3,11 +3,12 @@ import * as z from "zod/v4";
 import { formatPaper, formatSearch } from "./format.js";
 import { IacrClient } from "./iacr.js";
 import { CatalogStore } from "./catalog/store.js";
+import { CATALOG_PATH } from "./paths.js";
 
 const output = (text: string, data: unknown) => ({ content: [{ type: "text" as const, text }], structuredContent: data as Record<string, unknown> });
 const failure = (error: unknown) => ({ isError: true, content: [{ type: "text" as const, text: error instanceof Error ? error.message : String(error) }] });
 
-export function createServer(client = new IacrClient(), catalog = new CatalogStore(process.env.IACR_MCP_DB ?? "data/catalog.db")): McpServer {
+export function createServer(client = new IacrClient(), catalog = new CatalogStore(CATALOG_PATH, { readOnly: true })): McpServer {
   const server = new McpServer({ name: "iacr-research", version: "0.1.0" });
   server.registerTool("search_papers", {
     description: "Search titles, authors, abstracts, and keywords in the IACR Cryptology ePrint Archive. Supports IACR syntax such as quoted phrases, AND/OR/NOT, title:, author:, +required, -excluded, and prefix*.",
