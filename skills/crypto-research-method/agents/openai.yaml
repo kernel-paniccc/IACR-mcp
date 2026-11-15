@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cryptography Research Method"
+  short_description: "Run structured cryptographic research checks"
+  default_prompt: "Apply a rigorous cryptographic research workflow and return a concise evidence-backed report."

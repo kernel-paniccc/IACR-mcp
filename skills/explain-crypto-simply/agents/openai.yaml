@@ -1,0 +1,4 @@
+interface:
+  display_name: "Explain Cryptography Simply"
+  short_description: "Explain cryptographic concepts with compact examples"
+  default_prompt: "Explain this cryptographic concept simply, accurately, and with one concrete example."
