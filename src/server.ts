@@ -38,11 +38,12 @@ export function createServer(client = new IacrClient(), catalog = new CatalogSto
     }),
   }, async ({ query, limit }) => {
     try {
-      const hits = catalog.search(query, limit);
+      const result = catalog.searchDetailed(query, limit);
+      const { hits } = result;
       const text = hits.length
-        ? hits.map((hit) => `### ${hit.name}\n${hit.kind} · ${hit.sourceName} · trust: ${hit.trust}\n\n${hit.description}\n\n${hit.url ?? hit.provenanceUrl}`).join("\n\n")
-        : "No local catalog results. Run `npm run ingest` to build or refresh the public index.";
-      return output(text, { query, hits });
+        ? `${result.strategy === "broad" ? "No document matched every term; showing ranked partial matches. " : ""}Found ${result.total} matching catalog entries; showing ${hits.length}.\n\n${hits.map((hit) => `### ${hit.name}\n${hit.kind} · ${hit.sourceName} · trust: ${hit.trust}\n\n${hit.description}\n\n${hit.url ?? hit.provenanceUrl}`).join("\n\n")}`
+        : `No local catalog results for the original or expanded terminology. Tried: ${result.plan.expandedTerms.join(", ")}. Use search_papers for a live IACR query or refresh with npm run ingest.`;
+      return output(text, { query, ...result });
     } catch (e) { return failure(e); }
   });
 

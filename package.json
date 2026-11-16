@@ -4,7 +4,7 @@
   "description": "Research-grade MCP server for the IACR Cryptology ePrint Archive",
   "type": "module",
   "bin": { "iacr-mcp": "dist/index.js" },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": ["dist", "data", "sources", "skills", "README.md", "LICENSE"],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/index.ts",

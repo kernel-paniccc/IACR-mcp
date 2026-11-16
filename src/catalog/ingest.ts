@@ -1,6 +1,7 @@
 import { parseAwesomeMpc } from "./awesomeMpc.js";
 import { parseDocumentation } from "./documentation.js";
 import { parseRfcIndex } from "./rfcIndex.js";
+import { harvestIacrOai } from "./iacrOai.js";
 import { loadRegistry } from "./registry.js";
 import { CatalogStore } from "./store.js";
 
@@ -12,8 +13,14 @@ export interface IngestReport {
 export async function ingestPublicCatalog(store: CatalogStore, fetchFn: typeof fetch = fetch): Promise<IngestReport> {
   const registry = await loadRegistry();
   const report: IngestReport = { updated: [], failed: [] };
-  for (const source of registry.sources.filter((item) => item.enabled && item.contentUrl && item.id !== "iacr-eprint")) {
+  for (const source of registry.sources.filter((item) => item.enabled && (item.contentUrl || item.id === "iacr-eprint"))) {
     try {
+      if (source.id === "iacr-eprint") {
+        const entries = await harvestIacrOai(source, fetchFn);
+        store.replaceSource(source, entries);
+        report.updated.push({ sourceId: source.id, entries: entries.length });
+        continue;
+      }
       if (!source.contentUrl) throw new Error(`${source.id} has no contentUrl`);
       const response = await fetchFn(source.contentUrl, { signal: AbortSignal.timeout(20_000) });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);

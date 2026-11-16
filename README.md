@@ -7,14 +7,14 @@ Open, local-first research infrastructure for modern cryptography. The project b
 - `search_papers` — full-text IACR search with phrases, boolean operators, `title:`, `author:`, wildcards, category/year filters and structured results.
 - `get_paper` — normalized metadata, abstract, canonical landing page and PDF URL.
 - `get_bibtex` — canonical BibTeX from IACR.
-- `research_search` — offline FTS5 search over the normalized public catalog with provenance and trust levels.
+- `research_search` — offline terminology-aware search over the normalized public catalog with provenance and trust levels. It expands common cryptographic acronyms and falls back to ranked partial matches when a natural-language query is too restrictive.
 - `catalog_status` — indexed source and entry counts.
 
 This is an unofficial client. ePrint papers are preprints and are not peer reviewed by IACR.
 
 ## Run
 
-Requires Node.js 20+.
+Requires Node.js 22.13+ (the catalog uses Node's built-in SQLite API).
 
 ```bash
 npm install
@@ -54,4 +54,4 @@ The first catalog adapter ingests [awesome-mpc](https://github.com/rdragos/aweso
 
 The repository includes a ready-to-query catalog snapshot at `data/catalog.db`. Runtime paths are resolved relative to the installed package, not the caller's current directory, and no catalog environment variable is required. `npm run ingest` refreshes the snapshot from the public source registry.
 
-The server does not claim semantic/full-PDF search yet. Current search is deterministic SQLite FTS5; primary-source resolution, terminology aliases, graph traversal, and hybrid retrieval are subsequent layers.
+The bundled snapshot contains public IACR ePrint metadata and abstracts harvested through the official OAI-PMH endpoint, plus standards, framework documentation, and curated discovery sources. Search is deterministic SQLite FTS5 with primary-source ranking and an explicit terminology layer (including OLE/VOLE, VRSS, TTP/TFP, FROST/TSS-related vocabulary). It does not index or claim semantic search over full PDF bodies.
