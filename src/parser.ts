@@ -40,6 +40,35 @@ export function parseSearch(html: string, queryUrl: string, limit: number): Sear
   return { total: total || papers.length, papers, queryUrl };
 }
 
+export function parseRecentRss(xml: string, feedUrl: string, limit: number): SearchResult {
+  const $ = load(xml, { xmlMode: true });
+  const papers: PaperSummary[] = [];
+  $("channel > item").slice(0, limit).each((_index, item) => {
+    const node = $(item);
+    const url = clean(node.children("link").first().text());
+    const id = url.match(/((?:19|20)\d{2}\/\d{1,5})\/?$/)?.[1];
+    if (!id) return;
+    const creators = node.children("dc\\:creator").map((_i, creator) => clean($(creator).text())).get().filter(Boolean);
+    const category = clean(node.children("category").first().text());
+    const abstract = clean(node.children("description").first().text());
+    const pubDate = clean(node.children("pubDate").first().text());
+    const parsedDate = pubDate ? new Date(pubDate) : undefined;
+    const updated = parsedDate && !Number.isNaN(parsedDate.valueOf()) ? parsedDate.toISOString().slice(0, 10) : undefined;
+    const pdfUrl = node.children("enclosure").attr("url") || `${url}.pdf`;
+    papers.push({
+      id,
+      title: clean(node.children("title").first().text()),
+      authors: creators,
+      ...(category ? { category } : {}),
+      ...(abstract ? { abstract } : {}),
+      ...(updated ? { updated } : {}),
+      url,
+      pdfUrl,
+    });
+  });
+  return { total: papers.length, papers, queryUrl: feedUrl };
+}
+
 export function parsePaper(html: string, id: string): Paper {
   const $ = load(html);
   const title = clean($("h2, h1").filter((_, el) => !/lovely hat|cryptology eprint/i.test($(el).text())).first().text());

@@ -25,6 +25,21 @@ export function createServer(client = new IacrClient(), catalog = new CatalogSto
     inputSchema: z.object({ paper_id: z.string().describe("ID such as 2024/1234, or an eprint.iacr.org URL") }),
   }, async ({ paper_id }) => { try { const paper = await client.getPaper(paper_id); return output(formatPaper(paper), paper); } catch (e) { return failure(e); } });
 
+  server.registerTool("get_recent_papers", {
+    description: "Get the newest IACR ePrint papers from the official publication-ordered RSS feed.",
+    inputSchema: z.object({ limit: z.number().int().min(1).max(100).default(10) }),
+  }, async ({ limit }) => { try { const result = await client.getRecentPapers(limit); return output(formatSearch(result), result); } catch (e) { return failure(e); } });
+
+  server.registerTool("get_paper_url", {
+    description: "Validate an IACR ePrint identifier and return its canonical landing-page, PDF, and BibTeX URLs without downloading the paper.",
+    inputSchema: z.object({ paper_id: z.string().describe("ID such as 2024/1234, or an eprint.iacr.org URL") }),
+  }, async ({ paper_id }) => {
+    try {
+      const links = client.getPaperUrls(paper_id);
+      return output(`IACR ePrint ${links.id}\n\n[Landing page](${links.url}) · [PDF](${links.pdfUrl}) · [BibTeX](${links.bibtexUrl})`, links);
+    } catch (e) { return failure(e); }
+  });
+
   server.registerTool("get_bibtex", {
     description: "Get the canonical BibTeX citation for one IACR ePrint paper.",
     inputSchema: z.object({ paper_id: z.string() }),

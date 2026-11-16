@@ -32,6 +32,8 @@ The installer uses the bundled offline catalog, installs pinned dependencies, bu
 
 - `search_papers` — full-text IACR search with phrases, boolean operators, `title:`, `author:`, wildcards, category/year filters and structured results.
 - `get_paper` — normalized metadata, abstract, canonical landing page and PDF URL.
+- `get_recent_papers` — newest publications from the official publication-ordered IACR RSS feed.
+- `get_paper_url` — validated canonical landing-page, PDF and BibTeX URLs without a network download.
 - `get_bibtex` — canonical BibTeX from IACR.
 - `research_search` — offline terminology-aware search over the normalized public catalog with provenance and trust levels. It expands common cryptographic acronyms and falls back to ranked partial matches when a natural-language query is too restrictive.
 - `catalog_status` — indexed source and entry counts.

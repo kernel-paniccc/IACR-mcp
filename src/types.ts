@@ -20,3 +20,10 @@ export interface SearchResult {
   papers: PaperSummary[];
   queryUrl: string;
 }
+
+export interface PaperUrls {
+  id: string;
+  url: string;
+  pdfUrl: string;
+  bibtexUrl: string;
+}

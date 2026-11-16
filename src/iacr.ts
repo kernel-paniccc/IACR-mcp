@@ -1,7 +1,7 @@
 import { IacrHttpClient } from "./http.js";
 import { normalizePaperId } from "./ids.js";
-import { parsePaper, parseSearch } from "./parser.js";
-import type { Paper, SearchResult } from "./types.js";
+import { parsePaper, parseRecentRss, parseSearch } from "./parser.js";
+import type { Paper, PaperUrls, SearchResult } from "./types.js";
 
 export interface SearchOptions {
   query: string;
@@ -32,6 +32,18 @@ export class IacrClient {
   async getPaper(value: string): Promise<Paper> {
     const id = normalizePaperId(value);
     return parsePaper(await this.http.text(`https://eprint.iacr.org/${id}`), id);
+  }
+
+  async getRecentPapers(limit = 10): Promise<SearchResult> {
+    const boundedLimit = Math.min(Math.max(limit, 1), 100);
+    const url = "https://eprint.iacr.org/rss/rss.xml?order=recent";
+    return parseRecentRss(await this.http.text(url, "application/rss+xml,application/xml,text/xml"), url, boundedLimit);
+  }
+
+  getPaperUrls(value: string): PaperUrls {
+    const id = normalizePaperId(value);
+    const url = `https://eprint.iacr.org/${id}`;
+    return { id, url, pdfUrl: `${url}.pdf`, bibtexUrl: `${url}.bib` };
   }
 
   async getBibtex(value: string): Promise<string> {
