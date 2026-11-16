@@ -1,6 +1,6 @@
 import { IacrHttpClient } from "./http.js";
 import { normalizePaperId } from "./ids.js";
-import { parsePaper, parseRecentRss, parseSearch } from "./parser.js";
+import { parseBibtex, parsePaper, parseRecentRss, parseSearch } from "./parser.js";
 import type { Paper, PaperUrls, SearchResult } from "./types.js";
 
 export interface SearchOptions {
@@ -43,11 +43,11 @@ export class IacrClient {
   getPaperUrls(value: string): PaperUrls {
     const id = normalizePaperId(value);
     const url = `https://eprint.iacr.org/${id}`;
-    return { id, url, pdfUrl: `${url}.pdf`, bibtexUrl: `${url}.bib` };
+    return { id, url, pdfUrl: `${url}.pdf`, bibtexUrl: `${url}#bibtex` };
   }
 
   async getBibtex(value: string): Promise<string> {
     const id = normalizePaperId(value);
-    return this.http.text(`https://eprint.iacr.org/${id}.bib`, "application/x-bibtex,text/plain");
+    return parseBibtex(await this.http.text(`https://eprint.iacr.org/${id}`), id);
   }
 }

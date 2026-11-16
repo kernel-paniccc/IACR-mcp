@@ -93,3 +93,10 @@ export function parsePaper(html: string, id: string): Paper {
     url: `https://eprint.iacr.org/${id}`, pdfUrl: `https://eprint.iacr.org/${id}.pdf`,
   };
 }
+
+export function parseBibtex(html: string, id: string): string {
+  const $ = load(html);
+  const bibtex = $("pre#bibtex").first().text().trim();
+  if (!bibtex) throw new Error(`No BibTeX citation found for IACR ePrint ${id}`);
+  return bibtex;
+}
